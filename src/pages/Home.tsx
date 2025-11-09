@@ -43,11 +43,6 @@ export const Home = () => {
               <br />
               Точный расчёт за 3 секунды. Без ошибок. Без переплат.
             </p>
-            <div className="hero-buttons-starbucks">
-              <Link to="/insulators" className="btn-starbucks">
-                Перейти к услугам
-              </Link>
-            </div>
           </div>
 
           <div className="hero-illustration-starbucks">
@@ -79,9 +74,6 @@ export const Home = () => {
               14 лет опыта и более 400 выполненных проектов — <br />
               мы знаем, как сделать ваш дом тёплым и энергоэффективным
             </p>
-            <Link to="/insulators" className="explore-btn-starbucks">
-              Узнать больше
-            </Link>
           </div>
 
           <div className="services-grid-starbucks">
