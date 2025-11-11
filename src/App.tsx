@@ -7,7 +7,7 @@ import { InsulatorDetail } from './pages/InsulatorDetail';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/RIP-BMSTU-FRONTED">
       <Navbar />
       <div style={{ padding: '0 20px',  backgroundColor: '#f7f7f7' }}>
         <Routes>

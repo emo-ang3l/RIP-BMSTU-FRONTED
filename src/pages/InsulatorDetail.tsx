@@ -24,8 +24,8 @@ export const InsulatorDetail = () => {
   return (
     <>
       {/* === BREADCRUMBS === */}
-      <div className="hero-wrapper" style={{ backgroundColor: '#f8f8f8' }}>
-        <div className="container-camo" style={{ padding: '24px 0' }}>
+      <div className="hero-wrapper" style={{padding: '0px 20px', backgroundColor: '#f8f8f8' }}>
+        <div className="container-camo" style={{ padding: '20px 0px' }}>
           <BootstrapBreadcrumbs />
         </div>
       </div>
@@ -36,7 +36,7 @@ export const InsulatorDetail = () => {
           <div className="insulator-detail-card">
             <div className="insulator-image-wrapper">
               <img
-                src={insulator.image_url || '/default-image.jpg'}
+                src={insulator.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg'}
                 alt={insulator.insulator_name}
                 className="insulator-detail-img"
               />

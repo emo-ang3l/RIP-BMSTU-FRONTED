@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/api/api.ts","./src/components/breadcrumbs.tsx","./src/components/insulatorcard.tsx","./src/components/navbar.tsx","./src/pages/home.tsx","./src/pages/insulatordetail.tsx","./src/pages/insulatorslist.tsx","./src/types/index.ts"],"version":"5.9.3"}

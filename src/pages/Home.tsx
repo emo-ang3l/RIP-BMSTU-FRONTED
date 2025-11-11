@@ -1,5 +1,4 @@
-// src/pages/Home.tsx
-import { Link } from 'react-router-dom';
+
 import { BootstrapBreadcrumbs } from '../components/Breadcrumbs';
 
 // Иконки
@@ -21,8 +20,8 @@ export const Home = () => {
   return (
     <>
       {/* === BREADCRUMBS — СТИЛЬ STARBUCKS === */}
-      <div className="hero-wrapper" style={{ backgroundColor: '#422711' }}>
-        <div className="container-camo" style={{ padding: '16px 0' }}>
+      <div className="hero-wrapper" style={{ padding: '0px 20px', backgroundColor: '#422711' }}>
+        <div className="container-camo" style={{ padding: '20px 0px' }}>
           <BootstrapBreadcrumbs />
         </div>
       </div>
@@ -46,15 +45,9 @@ export const Home = () => {
           </div>
 
           <div className="hero-illustration-starbucks">
-            <img src="/b49f4458d655044b4810feb7a5eb45bd.png" alt="Расчёт утеплителя" />
+            <img src="/RIP-BMSTU-FRONTED/b49f4458d655044b4810feb7a5eb45bd.png" alt="Расчёт утеплителя" />
             
-            {/* ПРЯМОУГОЛЬНИК ПОД ФОТО — КАК У STARBUCKS */}
-            <div className="image-caption-box">
-              <p className="image-caption-title">Точный расчёт</p>
-              <p className="image-caption-desc">
-                Мы учитываем климат, материал стен, тип здания и нормы СНиП
-              </p>
-            </div>
+            
           </div>
 
           <div className="scroll-hint-starbucks">
@@ -79,22 +72,22 @@ export const Home = () => {
           <div className="services-grid-starbucks">
             {[
               {
-                icon: '/gas-kvas-com-p-znachok-kalkulyatora-na-prozrachnom-fone-34.png',
+                icon: '/RIP-BMSTU-FRONTED/gas-kvas-com-p-znachok-kalkulyatora-na-prozrachnom-fone-34.png',
                 title: 'Мгновенный расчёт',
                 desc: 'Толщина, материал, стоимость — за 3 секунды',
               },
               {
-                icon: '/196-1962781_download.png',
+                icon: '/RIP-BMSTU-FRONTED/196-1962781_download.png',
                 title: 'PDF-отчёт',
                 desc: 'Готовый документ для клиента или подрядчика',
               },
               {
-                icon: '/4d2cbe89c434d2b8ce083ff9d23e7a40.png',
+                icon: '/RIP-BMSTU-FRONTED/4d2cbe89c434d2b8ce083ff9d23e7a40.png',
                 title: 'Соответствие нормам',
                 desc: 'Учитываем СНиП, СП и региональные требования',
               },
               {
-                icon: '/1622187690_preview_anonymous.png',
+                icon: '/RIP-BMSTU-FRONTED/1622187690_preview_anonymous.png',
                 title: 'Поддержка 24/7',
                 desc: 'Консультация инженера в любое время',
               },

@@ -1,0 +1,8 @@
+/* public/fonts/fonts.css */
+@font-face {
+  font-family: 'Pomelo';
+  src: url('RIP-BMSTU-FRONTED/PomeloRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const InsulatorCard = ({ insulator }: Props) => {
-  const imageUrl = insulator.image_url || '/default-image.jpg';
+  const imageUrl = insulator.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg';
 
   return (
     <Link 
