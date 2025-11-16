@@ -4,21 +4,32 @@ import { InsulatorCard } from '../components/InsulatorCard';
 import { fetchInsulators } from '../api/api';
 import { BootstrapBreadcrumbs } from '../components/Breadcrumbs';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+  setSearch,
+  setMinPrice,
+  setMaxPrice,
+  useFilters,
+} from '../slices/filterSlice';
 
 export const InsulatorsList = () => {
+  const dispatch = useDispatch();
+  const filters = useFilters(); // ← фильтры из Redux
+
+  // === Локальные значения инпутов (для плавного ввода) ===
+  const [searchInput, setSearchInput] = useState(filters.search);
+  const [minPriceInput, setMinPriceInput] = useState(filters.minPrice);
+  const [maxPriceInput, setMaxPriceInput] = useState(filters.maxPrice);
+
   const [insulators, setInsulators] = useState<any[]>([]);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // === КОРЗИНА ===
+  // === ТВОЯ ОРИГИНАЛЬНАЯ КОРЗИНА ===
   const [cartCount, setCartCount] = useState(0);
   const [cartRequestId, setCartRequestId] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  // === Загрузка корзины ===
+  // === Загрузка корзины с бэкенда ===
   const loadCart = async () => {
     try {
       const res = await fetch('/api/insulatorrequests/cart-icon/');
@@ -36,15 +47,15 @@ export const InsulatorsList = () => {
     loadCart();
   }, []);
 
-  // === Загрузка утеплителей ===
+  // === Загрузка утеплителей по фильтрам из Redux ===
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
         const data = await fetchInsulators(
-          searchQuery,
-          minPrice ? Number(minPrice) : undefined,
-          maxPrice ? Number(maxPrice) : undefined
+          filters.search,
+          filters.minPrice ? Number(filters.minPrice) : undefined,
+          filters.maxPrice ? Number(filters.maxPrice) : undefined
         );
         setInsulators(data);
       } catch {
@@ -53,18 +64,21 @@ export const InsulatorsList = () => {
       setLoading(false);
     };
     load();
-  }, [searchQuery, minPrice, maxPrice]);
+  }, [filters.search, filters.minPrice, filters.maxPrice]);
 
+  // === Обработчики ===
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchQuery(searchInput.trim());
+    dispatch(setSearch(searchInput.trim()));
   };
 
   const handleClear = () => {
     setSearchInput('');
-    setSearchQuery('');
-    setMinPrice('');
-    setMaxPrice('');
+    setMinPriceInput('');
+    setMaxPriceInput('');
+    dispatch(setSearch(''));
+    dispatch(setMinPrice(''));
+    dispatch(setMaxPrice(''));
   };
 
   const goToCart = () => {
@@ -117,14 +131,21 @@ export const InsulatorsList = () => {
             <input
               type="number"
               placeholder="Цена от"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
+              value={minPriceInput}
+              onChange={(e) => {
+                const val = e.target.value;
+                setMinPriceInput(val);
+                dispatch(setMinPrice(val)); // ← в Redux сразу
+              }}
               className="price-input"
             />
-            {minPrice && (
+            {minPriceInput && (
               <button
                 type="button"
-                onClick={() => setMinPrice('')}
+                onClick={() => {
+                  setMinPriceInput('');
+                  dispatch(setMinPrice(''));
+                }}
                 className="clear-btn-icon"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -139,14 +160,21 @@ export const InsulatorsList = () => {
             <input
               type="number"
               placeholder="Цена до"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              value={maxPriceInput}
+              onChange={(e) => {
+                const val = e.target.value;
+                setMaxPriceInput(val);
+                dispatch(setMaxPrice(val)); // ← в Redux сразу
+              }}
               className="price-input"
             />
-            {maxPrice && (
+            {maxPriceInput && (
               <button
                 type="button"
-                onClick={() => setMaxPrice('')}
+                onClick={() => {
+                  setMaxPriceInput('');
+                  dispatch(setMaxPrice(''));
+                }}
                 className="clear-btn-icon"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -157,7 +185,7 @@ export const InsulatorsList = () => {
           </div>
 
           {/* СБРОС */}
-          {(searchInput || minPrice || maxPrice) && (
+          {(searchInput || minPriceInput || maxPriceInput) && (
             <button
               type="button"
               onClick={handleClear}
@@ -167,7 +195,7 @@ export const InsulatorsList = () => {
             </button>
           )}
 
-          {/* КОРЗИНА */}
+          {/* КОРЗИНА — ТВОЯ ОРИГИНАЛЬНАЯ */}
           <button
             type="button"
             onClick={goToCart}
