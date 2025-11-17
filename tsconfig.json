@@ -30,9 +30,5 @@
     "types": [],
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": [
-    "src",
-    "src/types/**/*.ts",
-    "src/types/**/*.d.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "node_modules/vite-plugin-pwa/client.d.ts"],
 }
