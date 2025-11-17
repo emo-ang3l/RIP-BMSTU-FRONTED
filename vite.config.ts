@@ -31,6 +31,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: { enabled: true },
+      
       manifest: {
         name: 'Расчёт утеплителя',
         short_name: 'Утеплитель',
@@ -38,16 +39,29 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#422711',
         theme_color: '#422711',
-        icons: [
+        
+        screenshots: [                      // можно ещё и сюда добавить (опционально)
           {
-            src: '/RIP-BMSTU-FRONTED/logo192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: '/RIP-BMSTU-FRONTED/1.jpg',
+            sizes: '320x320',
+            label: 'Десктопная версия',
           },
           {
-            src: '/RIP-BMSTU-FRONTED/logo512.png',
+            src: '/RIP-BMSTU-FRONTED/2.jpg',
             sizes: '512x512',
-            type: 'image/png',
+            label: 'Мобильная версия',
+          },
+        ],
+        icons: [
+          {
+            src: '/RIP-BMSTU-FRONTED/1.jpg',
+            sizes: '192x192',
+            type: 'image/jpg',
+          },
+          {
+            src: '/RIP-BMSTU-FRONTED/2.jpg',
+            sizes: '512x512',
+            type: 'image/jpg',
           },
         ],
       },

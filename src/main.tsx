@@ -7,11 +7,9 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { registerSW } from 'virtual:pwa-register';
 
-const updateSW = registerSW({
-  onOfflineReady() {
-    console.log('PWA готов к оффлайн-работе');
-  },
-});
+if ("serviceWorker" in navigator) {
+  registerSW()
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
