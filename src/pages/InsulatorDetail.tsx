@@ -15,8 +15,9 @@ export const InsulatorDetail = () => {
 
   if (!insulator) {
     return (
-      <div style={{ textAlign: 'center', padding: '80px 20px', fontSize: '18px', color: '#666' }}>
-        Загрузка...
+      <div className="loading-wrapper">
+        <img src="/RIP-BMSTU-FRONTED/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
+        <p className="empty-text">Идет загрузка</p>
       </div>
     );
   }
