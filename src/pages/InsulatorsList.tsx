@@ -212,9 +212,16 @@ export const InsulatorsList = () => {
         {/* === СПИСОК КАРТОЧЕК === */}
         <div className="insulators-grid">
           {loading ? (
-            <p className="status-message">Загрузка...</p>
+            <div className="loading-wrapper">
+              <img src="/RIP-BMSTU-FRONTED/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
+              <p className="empty-text">Идет загрузка</p>
+            </div>
           ) : insulators.length === 0 ? (
-            <p className="status-message error">Ничего не найдено</p>
+            <div className="empty-state">
+              <img src="/RIP-BMSTU-FRONTED/0dc6f19bc2da6d2e30622c52379bdee7.gif" alt="Ничего не найдено" className="empty-image" />
+              <p className="empty-text">Ничего не найдено</p>
+              <p className="empty-subtext">Попробуйте изменить фильтры</p>
+            </div>
           ) : (
             insulators.map((ins) => (
               <div key={ins.id} className="insulator-card-wrapper">
