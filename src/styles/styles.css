@@ -1442,3 +1442,49 @@ body {
   color: #62ca71;
   font-weight: bold;
 }
+
+
+/* Адаптивная сетка */
+.insulators-grid {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .insulators-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .insulators-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Карточка */
+.insulator-card-wrapper {
+  width: 100%;
+}
+
+.card-container {
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+/* Кнопка в карточке */
+
+
+.btn-add-to-cart-card:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
