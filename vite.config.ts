@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default defineConfig({
-  base: '/RIP-BMSTU-FRONTED/',
+  base: '/',
   server: {
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'cert.key')),
@@ -35,31 +35,31 @@ export default defineConfig({
       manifest: {
         name: 'Расчёт утеплителя',
         short_name: 'Утеплитель',
-        start_url: '/RIP-BMSTU-FRONTED/',
+        start_url: '.',
         display: 'standalone',
         background_color: '#422711',
         theme_color: '#422711',
         
         screenshots: [                      // можно ещё и сюда добавить (опционально)
           {
-            src: '/RIP-BMSTU-FRONTED/1.jpg',
+            src: '/1.jpg',
             sizes: '320x320',
             label: 'Десктопная версия',
           },
           {
-            src: '/RIP-BMSTU-FRONTED/2.jpg',
+            src: '2.jpg',
             sizes: '512x512',
             label: 'Мобильная версия',
           },
         ],
         icons: [
           {
-            src: '/RIP-BMSTU-FRONTED/1.jpg',
+            src: '/1.jpg',
             sizes: '192x192',
             type: 'image/jpg',
           },
           {
-            src: '/RIP-BMSTU-FRONTED/2.jpg',
+            src: '/2.jpg',
             sizes: '512x512',
             type: 'image/jpg',
           },

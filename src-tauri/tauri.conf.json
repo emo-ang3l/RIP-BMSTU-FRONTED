@@ -1,22 +1,23 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "RIP-BMSTU-FRONTED",
+  "productName": "cool",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.bmstu.rip",
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "https://192.168.1.108:3000",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
   "app": {
     "windows": [
       {
-        "title": "RIP-BMSTU-FRONTED",
-        "width": 800,
-        "height": 600,
+        "title": "RIP BMSTU",
+        "width": 1100,
+        "height": 800,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "url": "/",
+        "devtools": true
       }
     ],
     "security": {

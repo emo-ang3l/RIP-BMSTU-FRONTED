@@ -202,7 +202,7 @@ export const InsulatorsList = () => {
             className="cart-btn"
             title={`Корзина: ${cartCount} товар(ов)`}
           >
-            <img src="/RIP-BMSTU-FRONTED/basket.png" alt="Корзина" />
+            <img src="/basket.png" alt="Корзина" />
             {cartCount > 0 && (
               <span className="cart-badge">{cartCount}</span>
             )}
@@ -213,12 +213,12 @@ export const InsulatorsList = () => {
         <div className="insulators-grid">
           {loading ? (
             <div className="loading-wrapper">
-              <img src="/RIP-BMSTU-FRONTED/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
+              <img src="/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
               <p className="empty-text">Идет загрузка</p>
             </div>
           ) : insulators.length === 0 ? (
             <div className="empty-state">
-              <img src="/RIP-BMSTU-FRONTED/0dc6f19bc2da6d2e30622c52379bdee7.gif" alt="Ничего не найдено" className="empty-image" />
+              <img src="/0dc6f19bc2da6d2e30622c52379bdee7.gif" alt="Ничего не найдено" className="empty-image" />
               <p className="empty-text">Ничего не найдено</p>
               <p className="empty-subtext">Попробуйте изменить фильтры</p>
             </div>

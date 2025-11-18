@@ -16,7 +16,7 @@ export const InsulatorDetail = () => {
   if (!insulator) {
     return (
       <div className="loading-wrapper">
-        <img src="/RIP-BMSTU-FRONTED/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
+        <img src="/77310a9e5492a5e62c5b3ecee4a5ebd0.gif" alt="Загрузка..." className="loading-spinner" />
         <p className="empty-text">Идет загрузка</p>
       </div>
     );
@@ -37,7 +37,7 @@ export const InsulatorDetail = () => {
           <div className="insulator-detail-card">
             <div className="insulator-image-wrapper">
               <img
-                src={insulator.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg'}
+                src={insulator.image_url || '/default-image.jpg'}
                 alt={insulator.insulator_name}
                 className="insulator-detail-img"
               />
