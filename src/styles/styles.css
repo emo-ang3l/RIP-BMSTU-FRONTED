@@ -699,10 +699,7 @@ body {
 
 /* ВКЛАДКИ ПО ЦЕНТРУ */
 .nav-tabs-camo {
-    /* position: absolute; */
-    /* left: 50%; */
-    /* display: flex
-; */
+    display: flex;
     border-radius: 50px;
     padding: 6px;
     gap: 3px;
@@ -730,6 +727,148 @@ body {
 /* ПУСТОЕ МЕСТО СПРАВА */
 .navbar-spacer {
   width: 200px; /* Балансирует с логотипом */
+}
+
+/* === AUTH NAVBAR ELEMENTS === */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-auth {
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-login {
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+}
+
+.btn-login:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-register {
+  color: #082826;
+  background: #b97637;
+  border: 2px solid #b97637;
+}
+
+.btn-register:hover {
+  background: #a0662f;
+  border-color: #a0662f;
+  transform: translateY(-1px);
+}
+
+.auth-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-name {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-logout {
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.mobile-user-info {
+  padding: 12px 20px;
+  color: white;
+  font-weight: 500;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+}
+
+.btn-logout-mobile {
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  width: 100%;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+}
+
+.btn-logout-mobile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cart-icon-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.cart-icon-btn img {
+  width: 32px;
+  height: 32px;
+}
+
+.cart-badge-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #f06149;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name-link {
+  text-decoration: none;
+  color: white;
+  transition: opacity 0.3s ease;
+}
+
+.user-name-link:hover {
+  opacity: 0.8;
 }
 
 
@@ -1482,7 +1621,41 @@ body {
 
 
 /* Кнопка в карточке */
+.card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 
+.card-add-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f06149;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.card-add-btn:hover:not(:disabled) {
+  background: #d94e3a;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 4px 8px rgba(240, 97, 73, 0.3);
+}
+
+.card-add-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
 .btn-add-to-cart-card:disabled {
   background: #ccc;

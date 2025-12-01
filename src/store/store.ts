@@ -1,11 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
-import unitsReducer from './slices/unitsSlice';     // старый (оставляем)
-import filterReducer from "./slices/unitsSlice.ts";   // ← ДОБАВЛЯЕМ НОВЫЙ
+import unitsReducer from './slices/unitsSlice';
+import filterReducer from './slices/unitsSlice';
+import authReducer from './slices/authSlice';
+import ordersReducer from './slices/ordersSlice';
+import cartReducer from './slices/cartSlice';
 
 export const store = configureStore({
   reducer: {
-    units: unitsReducer,      // ← оставляем как было
-    filters: filterReducer,   // ← ДОБАВЛЯЕМ ФИЛЬТРЫ
+    units: unitsReducer,
+    filters: filterReducer,
+    auth: authReducer,
+    orders: ordersReducer,
+    cart: cartReducer,
   },
 });
 

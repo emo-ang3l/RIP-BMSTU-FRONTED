@@ -4,17 +4,72 @@ import { Navbar } from './components/Header/index';
 import { Home } from './pages/HomePage/index';
 import { InsulatorsList } from './pages/UnitsListPage/index';
 import { InsulatorDetail } from './pages/UnitPage/index';
+import { LoginPage } from './pages/LoginPage/index';
+import { RegisterPage } from './pages/RegisterPage/index';
+import { OrdersListPage } from './pages/OrdersListPage/index';
+import { RequestPage } from './pages/RequestPage/index';
+import { ProfilePage } from './pages/ProfilePage/index';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrentUser } from './store/slices/authSlice';
+import { AppDispatch, RootState } from './store/store';
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/RIP-BMSTU-FRONTED/login" replace />;
+  }
+  
+  return <>{children}</>;
+}
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    // Fetch current user if token exists
+    if (accessToken) {
+      dispatch(fetchCurrentUser());
+    }
+  }, [dispatch, accessToken]);
+
   return (
     <>
       <Navbar />
-      <div style={{ padding: '0 20px', backgroundColor: '#f7f7f7' }}>
+      <div style={{ padding: '0 20px', backgroundColor: '#f7f7f7', minHeight: 'calc(100vh - 100px)' }}>
         <Routes>
           <Route path="/RIP-BMSTU-FRONTED" element={<Navigate to="/RIP-BMSTU-FRONTED/home" replace />} />
           <Route path="/RIP-BMSTU-FRONTED/home" element={<Home />} />
           <Route path="/RIP-BMSTU-FRONTED/insulators" element={<InsulatorsList />} />
           <Route path="/RIP-BMSTU-FRONTED/insulators/:id" element={<InsulatorDetail />} />
+          <Route path="/RIP-BMSTU-FRONTED/login" element={<LoginPage />} />
+          <Route path="/RIP-BMSTU-FRONTED/register" element={<RegisterPage />} />
+          <Route 
+            path="/RIP-BMSTU-FRONTED/orders" 
+            element={
+              <ProtectedRoute>
+                <OrdersListPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/RIP-BMSTU-FRONTED/requests/:id" 
+            element={
+              <ProtectedRoute>
+                <RequestPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/RIP-BMSTU-FRONTED/profile" 
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </div>
     </>

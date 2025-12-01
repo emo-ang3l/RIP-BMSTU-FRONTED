@@ -1,0 +1,90 @@
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { loginUser, clearError } from '../../store/slices/authSlice';
+import { AppDispatch, RootState } from '../../store/store';
+import './LoginPage.css';
+
+export const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/RIP-BMSTU-FRONTED/home');
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(clearError());
+    const result = await dispatch(loginUser({ username, password }));
+    if (loginUser.fulfilled.match(result)) {
+      navigate('/RIP-BMSTU-FRONTED/home');
+    }
+  };
+
+  return (
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Вход в систему</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
+          {error && <div className="alert alert-danger">{error}</div>}
+          
+          <div className="form-group">
+            <label htmlFor="username">Имя пользователя</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="form-control"
+              placeholder="Введите имя пользователя"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Пароль</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="form-control"
+              placeholder="Введите пароль"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="btn btn-primary btn-block"
+          >
+            {isLoading ? 'Вход...' : 'Войти'}
+          </button>
+        </form>
+
+        <div className="auth-footer">
+          <p>
+            Нет аккаунта?{' '}
+            <Link to="/RIP-BMSTU-FRONTED/register" className="auth-link">
+              Зарегистрироваться
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+

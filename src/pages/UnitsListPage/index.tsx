@@ -4,13 +4,15 @@ import { InsulatorCard } from '../../components/UnitCard/index';
 import { fetchInsulators } from '../../modules/mocks';
 import { BootstrapBreadcrumbs } from '../../components/Breadcrumbs';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setSearch,
   setMinPrice,
   setMaxPrice,
   useFilters,
 } from '../../store/slices/unitsSlice';
+import { fetchCartInfo } from '../../store/slices/cartSlice';
+import { RootState } from '../../store/store';
 
 export const InsulatorsList = () => {
   const dispatch = useDispatch();
@@ -24,28 +26,17 @@ export const InsulatorsList = () => {
   const [insulators, setInsulators] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // === ТВОЯ ОРИГИНАЛЬНАЯ КОРЗИНА ===
-  const [cartCount, setCartCount] = useState(0);
-  const [cartRequestId, setCartRequestId] = useState<number | null>(null);
+  // === КОРЗИНА ИЗ REDUX ===
+  const { count: cartCount, requestId: cartRequestId } = useSelector((state: RootState) => state.cart);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   // === Загрузка корзины с бэкенда ===
-  const loadCart = async () => {
-    try {
-      const res = await fetch('/api/insulatorrequests/cart-icon/');
-      if (!res.ok) throw new Error('Cart error');
-      const data = await res.json();
-      setCartCount(data.count || 0);
-      setCartRequestId(data.request_id || null);
-    } catch (error) {
-      console.warn('Корзина недоступна:', error);
-      setCartCount(0);
-    }
-  };
-
   useEffect(() => {
-    loadCart();
-  }, []);
+    if (isAuthenticated) {
+      dispatch(fetchCartInfo());
+    }
+  }, [dispatch, isAuthenticated]);
 
   // === Загрузка утеплителей по фильтрам из Redux ===
   useEffect(() => {
@@ -83,9 +74,9 @@ export const InsulatorsList = () => {
 
   const goToCart = () => {
     if (cartRequestId) {
-      navigate(`/requests/${cartRequestId}`);
+      navigate(`/RIP-BMSTU-FRONTED/requests/${cartRequestId}`);
     } else {
-      navigate('/requests/draft');
+      navigate('/RIP-BMSTU-FRONTED/insulators');
     }
   };
 
