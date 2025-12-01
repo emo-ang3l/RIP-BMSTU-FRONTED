@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default defineConfig({
+  base: '/RIP-BMSTU-FRONTED/',
   plugins: [
     react(),
     tsconfigPaths(),

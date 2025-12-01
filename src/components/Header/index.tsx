@@ -18,14 +18,14 @@ export const Navbar = () => {
     <header className="navbar-camo">
       <div className="navbar-inner-camo">
         {/* ЛОГОТИП СЛЕВА */}
-        <NavLink to="/home" className="logo-camo" onClick={closeMobileMenu}>
+        <NavLink to="/RIP-BMSTU-FRONTED/home" className="logo-camo" onClick={closeMobileMenu}>
           Утеплители
         </NavLink>
 
         {/* ВКЛАДКИ ПО ЦЕНТРУ (ТОЛЬКО НА ДЕСКТОПЕ) */}
         <nav className="nav-tabs-camo desktop-only">
           <NavLink
-            to="/home"
+            to="/RIP-BMSTU-FRONTED/home"
             className={({ isActive }) =>
               `nav-tab-item ${isActive ? 'active' : ''}`
             }
@@ -34,7 +34,7 @@ export const Navbar = () => {
             Домой
           </NavLink>
           <NavLink
-            to="/insulators"
+            to="/RIP-BMSTU-FRONTED/insulators"
             className={({ isActive }) =>
               `nav-tab-item ${isActive ? 'active' : ''}`
             }

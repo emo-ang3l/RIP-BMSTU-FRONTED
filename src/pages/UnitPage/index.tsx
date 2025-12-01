@@ -37,7 +37,7 @@ export const InsulatorDetail = () => {
           <div className="insulator-detail-card">
             <div className="insulator-image-wrapper">
               <img
-                src={insulator.image_url || '/default-image.jpg'}
+                src={insulator.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg'}
                 alt={insulator.insulator_name}
                 className="insulator-detail-img"
               />

@@ -6,11 +6,11 @@ interface Props {
 }
 
 export const InsulatorCard = ({ insulator }: Props) => {
-  const imageUrl = insulator.image_url || '/default-image.jpg';
+  const imageUrl = insulator.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg';
 
   return (
     <Link 
-      to={`/insulators/${insulator.id}`} 
+      to={`/RIP-BMSTU-FRONTED/insulators/${insulator.id}`} 
       className="card-link"
       state={{ name: insulator.insulator_name }}  // ← добавляем
     >
