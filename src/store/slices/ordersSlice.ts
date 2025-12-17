@@ -1,20 +1,10 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { apiClient } from '../../api/axios';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { api } from '../../api';
+import type { InsulatorRequest as ApiInsulatorRequest } from '../../api/Api';
 
-export interface InsulatorRequest {
-  id: number;
-  status_request: 'DRAFT' | 'DELETED' | 'FORMED' | 'COMPLETED' | 'REJECTED';
-  creation_datetime: string;
-  formation_datetime?: string | null;
-  completion_datetime?: string | null;
-  client_username: string;
-  manager_username?: string;
-  climate_zone: string;
-  required_r_value: number;
-  wall_type: string;
-  norm_standard: string;
-  total_thickness?: number | null;
-  insulators?: string;
+// Локальный тип с обязательным id для использования в Redux state
+export interface InsulatorRequest extends Omit<ApiInsulatorRequest, 'id'> {
+  id: number; // Делаем id обязательным
 }
 
 interface OrdersState {
@@ -34,8 +24,13 @@ export const fetchUserOrders = createAsyncThunk(
   'orders/fetchUserOrders',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get('/insulatorrequests/');
-      return response.data;
+      // Используем сгенерированный API для получения списка заявок
+      const response = await api.insulatorrequests.insulatorrequestsList();
+      // Фильтруем элементы без id и преобразуем тип
+      const orders = response.data
+        .filter((order): order is ApiInsulatorRequest & { id: number } => order.id !== undefined)
+        .map((order) => ({ ...order, id: order.id } as InsulatorRequest));
+      return orders;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.detail || error.message || 'Failed to fetch orders'
@@ -49,8 +44,13 @@ export const createOrder = createAsyncThunk(
   'orders/createOrder',
   async (orderData: Partial<InsulatorRequest>, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post('/insulatorrequests/', orderData);
-      return response.data;
+      // Используем сгенерированный API для создания заявки
+      const response = await api.insulatorrequests.insulatorrequestsCreate(orderData as ApiInsulatorRequest);
+      // Преобразуем тип, гарантируя наличие id
+      if (response.data.id === undefined) {
+        throw new Error('Created order missing id');
+      }
+      return { ...response.data, id: response.data.id } as InsulatorRequest;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.detail || error.message || 'Failed to create order'
@@ -64,8 +64,16 @@ export const updateOrder = createAsyncThunk(
   'orders/updateOrder',
   async ({ id, data }: { id: number; data: Partial<InsulatorRequest> }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.put(`/insulatorrequests/${id}/`, data);
-      return response.data;
+      // Используем сгенерированный API для обновления заявки
+      const response = await api.insulatorrequests.insulatorrequestsUpdate(
+        { id },
+        data as ApiInsulatorRequest
+      );
+      // Преобразуем тип, гарантируя наличие id
+      if (response.data.id === undefined) {
+        throw new Error('Updated order missing id');
+      }
+      return { ...response.data, id: response.data.id } as InsulatorRequest;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.detail || error.message || 'Failed to update order'
@@ -79,7 +87,8 @@ export const deleteOrder = createAsyncThunk(
   'orders/deleteOrder',
   async (id: number, { rejectWithValue }) => {
     try {
-      await apiClient.delete(`/insulatorrequests/${id}/`);
+      // Используем сгенерированный API для удаления заявки
+      await api.insulatorrequests.insulatorrequestsDelete({ id });
       return id;
     } catch (error: any) {
       return rejectWithValue(

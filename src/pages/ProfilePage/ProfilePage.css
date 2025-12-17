@@ -36,19 +36,17 @@
 }
 
 .tab-button:hover {
-  color: #667eea;
+  color: #b97637;
 }
 
 .tab-button.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: #b97637;
+  border-bottom-color: #b97637;
 }
 
-.profile-section {
-  background: white;
+.profile-section { 
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 24px; 
 }
 
 .section-header {
@@ -93,8 +91,8 @@
 
 .form-control:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #b97637;
+  box-shadow: 0 0 0 3px rgba(185, 118, 55, 0.1);
 }
 
 .form-control:disabled {
@@ -169,14 +167,20 @@
   transition: all 0.3s ease;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+.profile-container .btn-primary,
+.profile-section .btn-primary,
+.profile-form .btn-primary {
+  background: linear-gradient(135deg, #b97637 0%, #a0662f 100%) !important;
+  color: white !important;
+  border: none !important;
 }
 
-.btn-primary:hover {
+.profile-container .btn-primary:hover,
+.profile-section .btn-primary:hover,
+.profile-form .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(185, 118, 55, 0.4) !important;
+  background: linear-gradient(135deg, #a0662f 0%, #8b5630 100%) !important;
 }
 
 .btn-secondary {
@@ -201,7 +205,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border-top: 4px solid #b97637;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

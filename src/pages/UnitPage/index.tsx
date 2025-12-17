@@ -1,17 +1,47 @@
 // src/pages/InsulatorDetail.tsx
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchInsulatorById } from '../../modules/mocks';
 import { Insulator } from '../../modules/types';
 import { BootstrapBreadcrumbs } from '../../components/Breadcrumbs';
+import { addToRequest } from '../../store/slices/cartSlice';
+import { AppDispatch, RootState } from '../../store/store';
 
 export const InsulatorDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isLoading } = useSelector((state: RootState) => state.cart);
   const [insulator, setInsulator] = useState<Insulator | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     fetchInsulatorById(Number(id)).then(setInsulator);
   }, [id]);
+
+  const handleAddToRequest = async () => {
+    if (!insulator) return;
+    
+    if (!isAuthenticated) {
+      navigate('/RIP-BMSTU-FRONTED/login');
+      return;
+    }
+
+
+    setIsAdding(true);
+    try {
+      await dispatch(addToRequest(insulator.id));
+      // Optional: show success message or navigate to cart
+      // alert('Утеплитель добавлен в заявку');
+    } catch (error) {
+      console.error('Failed to add to request:', error);
+      alert('Ошибка при добавлении в заявку');
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   if (!insulator) {
     return (
@@ -48,31 +78,11 @@ export const InsulatorDetail = () => {
               <h1 className="insulator-title">{insulator.insulator_name}</h1>
 
               {/* Статус */}
-              <div className="insulator-status">
-                <span
-                  className={`status-badge ${insulator.Insulator_active ? 'in-stock' : 'out-of-stock'}`}
-                >
-                  {insulator.Insulator_active ? 'В наличии' : 'Нет в наличии'}
-                </span>
-              </div>
-
               {/* Характеристики */}
               <div className="insulator-specs">
                 <div className="spec-item">
                   <span className="spec-label">Теплопроводность</span>
                   <span className="spec-value">{insulator.thermal_conductivity} Вт/м·К</span>
-                </div>
-                <div className="spec-item">
-                  <span className="spec-label">Цена</span>
-                  <span className="spec-value">{insulator.price_per_m2} ₽/м²</span>
-                </div>
-                <div className="spec-item">
-                  <span className="spec-label">Плотность</span>
-                  <span className="spec-value">{insulator.density} кг/м³</span>
-                </div>
-                <div className="spec-item">
-                  <span className="spec-label">Огнестойкость</span>
-                  <span className="spec-value">{insulator.fire_rating}</span>
                 </div>
               </div>
 
@@ -83,9 +93,30 @@ export const InsulatorDetail = () => {
               </div>
 
               {/* Кнопка */}
-              <Link to="/insulators" className="btn-add-to-cart">
-                Добавить в заявку
-              </Link>
+              {isAuthenticated ? (
+                <button
+                  onClick={handleAddToRequest}
+                  disabled={isAdding || isLoading}
+                  className="btn-add-to-cart"
+                >
+                  {isAdding ? 'Добавление...' : 'Добавить в заявку'}
+                </button>
+              ) : !isAuthenticated ? (
+                <button
+                  onClick={() => navigate('/RIP-BMSTU-FRONTED/login')}
+                  className="btn-add-to-cart"
+                >
+                  Войти для добавления в заявку
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="btn-add-to-cart"
+                  style={{ opacity: 0.6, cursor: 'not-allowed' }}
+                >
+                  Утеплитель недоступен
+                </button>
+              )}
             </div>
           </div>
         </div>

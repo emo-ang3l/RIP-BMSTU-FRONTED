@@ -9,6 +9,7 @@ import { RegisterPage } from './pages/RegisterPage/index';
 import { OrdersListPage } from './pages/OrdersListPage/index';
 import { RequestPage } from './pages/RequestPage/index';
 import { ProfilePage } from './pages/ProfilePage/index';
+import { Snowfall } from './components/Snowfall/index';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentUser } from './store/slices/authSlice';
@@ -29,7 +30,13 @@ function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    // Fetch current user if token exists
+    // Очищаем localStorage при загрузке страницы - сессия сбрасывается при F5
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+  }, []);
+
+  useEffect(() => {
+    // Fetch current user if token exists (только из Redux state)
     if (accessToken) {
       dispatch(fetchCurrentUser());
     }
@@ -37,6 +44,7 @@ function App() {
 
   return (
     <>
+      <Snowfall />
       <Navbar />
       <div style={{ padding: '0 20px', backgroundColor: '#f7f7f7', minHeight: 'calc(100vh - 100px)' }}>
         <Routes>
@@ -55,7 +63,7 @@ function App() {
             } 
           />
           <Route 
-            path="/RIP-BMSTU-FRONTED/requests/:id" 
+            path="/RIP-BMSTU-FRONTED/insulatorequests/:id" 
             element={
               <ProtectedRoute>
                 <RequestPage />

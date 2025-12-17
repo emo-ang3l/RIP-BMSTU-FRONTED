@@ -39,9 +39,14 @@ export const Navbar = () => {
     closeMobileMenu();
   };
 
+  const handleProfileClick = () => {
+    navigate('/RIP-BMSTU-FRONTED/profile');
+    closeMobileMenu();
+  };
+
   const handleCartClick = () => {
     if (requestId) {
-      navigate(`/RIP-BMSTU-FRONTED/requests/${requestId}`);
+      navigate(`/RIP-BMSTU-FRONTED/insulatorequests/${requestId}`);
     } else {
       navigate('/RIP-BMSTU-FRONTED/insulators');
     }
@@ -53,7 +58,14 @@ export const Navbar = () => {
       <div className="navbar-inner-camo">
         {/* ЛОГОТИП СЛЕВА */}
         <NavLink to="/RIP-BMSTU-FRONTED/home" className="logo-camo" onClick={closeMobileMenu}>
-          Утеплители
+          <div className="logo-container">
+            <svg className="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="logo-text">THERMO</span>
+          </div>
         </NavLink>
 
         {/* ВКЛАДКИ ПО ЦЕНТРУ (ТОЛЬКО НА ДЕСКТОПЕ) */}
@@ -93,20 +105,27 @@ export const Navbar = () => {
         <div className="navbar-auth desktop-only">
           {isAuthenticated ? (
             <div className="auth-user-menu">
-              {cartCount > 0 && (
-                <button onClick={handleCartClick} className="cart-icon-btn" title="Корзина">
-                  <img src="/RIP-BMSTU-FRONTED/basket.png" alt="Корзина" />
-                  {cartCount > 0 && <span className="cart-badge-header">{cartCount}</span>}
-                </button>
-              )}
+              <button 
+                onClick={handleCartClick} 
+                className={`cart-icon-btn ${requestId ? 'cart-active' : 'cart-disabled'}`}
+                disabled={!requestId}
+                title={requestId ? `Корзина: ${cartCount} товар(ов)` : 'Корзина пуста'}
+              >
+                <img src="/RIP-BMSTU-FRONTED/basket.png" alt="Корзина" />
+                {cartCount > 0 && <span className="cart-badge-header">{cartCount}</span>}
+              </button>
+              <span className="user-name">{user?.username || 'Пользователь'}</span>
               <NavLink
                 to="/RIP-BMSTU-FRONTED/profile"
-                className="user-name-link"
+                className="btn-auth btn-profile"
                 onClick={closeMobileMenu}
               >
-                <span className="user-name">{user?.username || 'Пользователь'}</span>
+                Изменить данные
               </NavLink>
-              <button onClick={handleLogout} className="btn-logout">
+              <button
+                onClick={handleLogout}
+                className="btn-auth btn-logout"
+              >
                 Выйти
               </button>
             </div>
@@ -169,14 +188,13 @@ export const Navbar = () => {
                 >
                   Мои заказы
                 </NavLink>
-                {cartCount > 0 && (
-                  <button
-                    onClick={handleCartClick}
-                    className="mobile-menu-item"
-                  >
-                    Корзина ({cartCount})
-                  </button>
-                )}
+                <button
+                  onClick={handleCartClick}
+                  className={`mobile-menu-item ${requestId ? '' : 'disabled'}`}
+                  disabled={!requestId}
+                >
+                  Корзина {requestId ? `(${cartCount})` : '(пуста)'}
+                </button>
                 <NavLink
                   to="/RIP-BMSTU-FRONTED/profile"
                   className={`mobile-menu-item ${location.pathname.includes('/profile') ? 'active' : ''}`}

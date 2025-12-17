@@ -74,7 +74,7 @@ export const InsulatorsList = () => {
 
   const goToCart = () => {
     if (cartRequestId) {
-      navigate(`/RIP-BMSTU-FRONTED/requests/${cartRequestId}`);
+      navigate(`/RIP-BMSTU-FRONTED/insulatorequests/${cartRequestId}`);
     } else {
       navigate('/RIP-BMSTU-FRONTED/insulators');
     }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchCurrentUser } from '../../store/slices/authSlice';
 import { AppDispatch, RootState } from '../../store/store';
+import { api } from '../../api';
 import './ProfilePage.css';
 
 export const ProfilePage = () => {
@@ -45,25 +46,21 @@ export const ProfilePage = () => {
     e.preventDefault();
     setMessage(null);
     try {
-      const response = await fetch('/api/users/me/', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify(formData),
+      // Используем сгенерированный API для обновления профиля
+      await api.users.usersMeUpdate({
+        username: user.username,
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
       });
-
-      if (response.ok) {
-        await dispatch(fetchCurrentUser());
-        setIsEditing(false);
-        setMessage({ type: 'success', text: 'Профиль успешно обновлен' });
-      } else {
-        const data = await response.json();
-        setMessage({ type: 'error', text: data.detail || 'Ошибка при обновлении профиля' });
-      }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Ошибка при обновлении профиля' });
+      await dispatch(fetchCurrentUser());
+      setIsEditing(false);
+      setMessage({ type: 'success', text: 'Профиль успешно обновлен' });
+    } catch (error: any) {
+      setMessage({ 
+        type: 'error', 
+        text: error.response?.data?.detail || 'Ошибка при обновлении профиля' 
+      });
     }
   };
 

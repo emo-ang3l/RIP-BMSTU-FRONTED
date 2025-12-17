@@ -26,10 +26,6 @@ export const InsulatorCard = ({ insulator }: Props) => {
       return;
     }
 
-    if (!insulator.Insulator_active) {
-      alert('Этот утеплитель недоступен');
-      return;
-    }
 
     setIsAdding(true);
     try {
@@ -53,11 +49,6 @@ export const InsulatorCard = ({ insulator }: Props) => {
             <img src={imageUrl} alt={insulator.insulator_name} className="card-image" />
           </div>
           <div className="card-body-container">
-            <div className="card-presence-container">
-              <p className={`card-presence-text ${!insulator.Insulator_active ? 'not-available' : ''}`}>
-                {insulator.Insulator_active ? 'В наличии' : 'Нет в наличии'}
-              </p>
-            </div>
             <div className="card-text-container">
               <p className="card-body-text">{insulator.insulator_name}</p>
               <div className="card-price-container">
@@ -70,16 +61,7 @@ export const InsulatorCard = ({ insulator }: Props) => {
           </div>
         </div>
       </Link>
-      {isAuthenticated && insulator.Insulator_active && (
-        <button
-          onClick={handleAddToRequest}
-          disabled={isAdding || isLoading}
-          className="card-add-btn"
-          title="Добавить в заявку"
-        >
-          {isAdding ? 'Добавление...' : 'Добавить в заявку'}
-        </button>
-      )}
+
     </div>
   );
 };

@@ -21,10 +21,7 @@ export const RequestPage = () => {
   const [items, setItems] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    climate_zone: '',
     required_r_value: '',
-    wall_type: '',
-    norm_standard: '',
   });
 
   useEffect(() => {
@@ -39,10 +36,7 @@ export const RequestPage = () => {
           console.log('Request data:', result.payload); // Debug log
           setRequestData(result.payload);
           setFormData({
-            climate_zone: result.payload.climate_zone || '',
             required_r_value: result.payload.required_r_value || '',
-            wall_type: result.payload.wall_type || '',
-            norm_standard: result.payload.norm_standard || '',
           });
           
           // Try multiple possible field names for items
@@ -146,8 +140,8 @@ export const RequestPage = () => {
 
   const handleFormRequest = async () => {
     if (!id) return;
-    if (!formData.climate_zone || !formData.required_r_value || !formData.wall_type || !formData.norm_standard) {
-      alert('Заполните все обязательные поля');
+    if (!formData.required_r_value) {
+      alert('Заполните R-значение');
       return;
     }
     if (window.confirm('Подтвердить заявку? После подтверждения редактирование будет недоступно.')) {
@@ -157,6 +151,19 @@ export const RequestPage = () => {
         navigate('/RIP-BMSTU-FRONTED/orders');
       }
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }) + ' ' + date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   const getStatusBadge = (status: string) => {
@@ -197,103 +204,67 @@ export const RequestPage = () => {
 
   return (
     <div className="request-container">
-      <div className="request-header">
-        <h1>Заявка #{requestData.id}</h1>
-        {getStatusBadge(requestData.status_request)}
-      </div>
-
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* Форма редактирования заявки */}
-      {canEdit && (
-        <div className="request-form-section">
-          <div className="section-header">
-            <h2>Параметры заявки</h2>
-            {!isEditing && (
-              <button onClick={() => setIsEditing(true)} className="btn btn-secondary">
-                Редактировать
-              </button>
-            )}
-          </div>
-
-          {isEditing ? (
-            <form onSubmit={handleUpdateRequest} className="request-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Климатическая зона *</label>
-                  <input
-                    type="text"
-                    value={formData.climate_zone}
-                    onChange={(e) => setFormData({ ...formData, climate_zone: e.target.value })}
-                    required
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Требуемое R-значение *</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={formData.required_r_value}
-                    onChange={(e) => setFormData({ ...formData, required_r_value: e.target.value })}
-                    required
-                    className="form-control"
-                  />
-                </div>
+      {/* Однострочная карточка с данными заявки */}
+      <div className="request-single-row">
+        <div className="request-row-header">
+          <h1>Заявка #{requestData.id}</h1>
+          {getStatusBadge(requestData.status_request)}
+        </div>
+        
+        {isEditing ? (
+          <form onSubmit={handleUpdateRequest} className="request-row-form">
+            <div className="request-row-fields">
+              <div className="field-group">
+                <label>Дата создания</label>
+                <span>{formatDate(requestData.creation_datetime)}</span>
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Тип стены *</label>
-                  <input
-                    type="text"
-                    value={formData.wall_type}
-                    onChange={(e) => setFormData({ ...formData, wall_type: e.target.value })}
-                    required
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Норматив *</label>
-                  <input
-                    type="text"
-                    value={formData.norm_standard}
-                    onChange={(e) => setFormData({ ...formData, norm_standard: e.target.value })}
-                    required
-                    className="form-control"
-                  />
-                </div>
+              <div className="field-group">
+                <label>R-значение *</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={formData.required_r_value}
+                  onChange={(e) => setFormData({ ...formData, required_r_value: e.target.value })}
+                  required
+                  className="form-control"
+                />
               </div>
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary">
-                  Сохранить
-                </button>
-                <button type="button" onClick={() => setIsEditing(false)} className="btn btn-secondary">
-                  Отмена
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="request-info">
-              <div className="info-row">
-                <span className="info-label">Климатическая зона:</span>
-                <span className="info-value">{requestData.climate_zone || 'Не указано'}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Требуемое R-значение:</span>
-                <span className="info-value">{requestData.required_r_value || 'Не указано'}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Тип стены:</span>
-                <span className="info-value">{requestData.wall_type || 'Не указано'}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Норматив:</span>
-                <span className="info-value">{requestData.norm_standard || 'Не указано'}</span>
+              <div className="field-group">
+                <label>Толщина (мм)</label>
+                <span>{requestData.total_thickness ? `${requestData.total_thickness.toFixed(2)}` : '-'}</span>
               </div>
             </div>
-          )}
-        </div>
-      )}
+            <div className="request-row-actions">
+              <button type="submit" className="btn btn-primary btn-sm">Сохранить</button>
+              <button type="button" onClick={() => setIsEditing(false)} className="btn btn-secondary btn-sm">Отмена</button>
+            </div>
+          </form>
+        ) : (
+          <div className="request-row-data">
+            <div className="field-group">
+              <label>Дата создания</label>
+              <span>{formatDate(requestData.creation_datetime)}</span>
+            </div>
+            <div className="field-group">
+              <label>R-значение</label>
+              <span>{requestData.required_r_value || '-'}</span>
+            </div>
+            <div className="field-group">
+              <label>Толщина (мм)</label>
+              <span>{requestData.total_thickness ? `${requestData.total_thickness.toFixed(2)}` : '-'}</span>
+            </div>
+            {canEdit && (
+              <div className="field-group">
+                <button onClick={() => setIsEditing(true)} className="btn btn-secondary btn-sm">
+                  Редактировать
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Список утеплителей */}
       <div className="request-items-section">
@@ -315,7 +286,6 @@ export const RequestPage = () => {
                 const insulatorName = insulator?.insulator_name || `Утеплитель #${insulatorId}`;
                 const imageUrl = insulator?.image_url || '/RIP-BMSTU-FRONTED/default-image.jpg';
                 const thermalConductivity = insulator?.thermal_conductivity;
-                const price = insulator?.price_per_m2;
 
                 return (
                   <div key={item.id || insulatorId || index} className="item-card">
@@ -327,15 +297,20 @@ export const RequestPage = () => {
                     </div>
                     <div className="item-info">
                       <h3>{insulatorName}</h3>
-                      {thermalConductivity !== undefined && (
-                        <p className="item-spec">Теплопроводность: {thermalConductivity} Вт/м·К</p>
-                      )}
-                      {price && (
-                        <p className="item-price">Цена: {price} ₽/м²</p>
-                      )}
-                      {item.calculated_thickness && (
-                        <p className="item-thickness">Расчетная толщина: {item.calculated_thickness.toFixed(2)} мм</p>
-                      )}
+                      <div className="item-info-fields">
+                        {thermalConductivity !== undefined && (
+                          <div className="item-field">
+                            <span className="item-field-label">Теплопроводность:</span>
+                            <span className="item-field-value">{thermalConductivity} Вт/м·К</span>
+                          </div>
+                        )}
+                        {item.calculated_thickness && (
+                          <div className="item-field">
+                            <span className="item-field-label">Расчетная толщина:</span>
+                            <span className="item-field-value item-field-value-highlight">{item.calculated_thickness.toFixed(2)} мм</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="item-actions">
                       {canEdit ? (
@@ -390,42 +365,6 @@ export const RequestPage = () => {
         </div>
       )}
 
-      {/* Информация о заявке (для просмотра) */}
-      {!canEdit && (
-        <div className="request-info-section">
-          <h2>Информация о заявке</h2>
-          <div className="request-info">
-            <div className="info-row">
-              <span className="info-label">Дата создания:</span>
-              <span className="info-value">
-                {new Date(requestData.creation_datetime).toLocaleString('ru-RU')}
-              </span>
-            </div>
-            {requestData.formation_datetime && (
-              <div className="info-row">
-                <span className="info-label">Дата формирования:</span>
-                <span className="info-value">
-                  {new Date(requestData.formation_datetime).toLocaleString('ru-RU')}
-                </span>
-              </div>
-            )}
-            {requestData.completion_datetime && (
-              <div className="info-row">
-                <span className="info-label">Дата завершения:</span>
-                <span className="info-value">
-                  {new Date(requestData.completion_datetime).toLocaleString('ru-RU')}
-                </span>
-              </div>
-            )}
-            {requestData.total_thickness && (
-              <div className="info-row">
-                <span className="info-label">Общая толщина:</span>
-                <span className="info-value">{requestData.total_thickness.toFixed(2)} мм</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

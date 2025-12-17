@@ -107,15 +107,17 @@ export const RegisterPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Пароль</label>
+            <label htmlFor="password">Пароль *</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
+              required
+              minLength={8}
               className="form-control"
-              placeholder="Введите пароль"
+              placeholder="Введите пароль (минимум 8 символов)"
             />
           </div>
 

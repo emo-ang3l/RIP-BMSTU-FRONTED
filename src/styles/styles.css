@@ -316,12 +316,36 @@ body {
 }
 
 .logo-camo {
-  font-size: 24px;
-  font-weight: 700;
-  
-  color: white;
+  display: flex;
+  align-items: center;
   text-decoration: none;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.3s ease;
+}
+
+.logo-camo:hover .logo-icon {
+  transform: scale(1.1);
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
   letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* === АКТИВНАЯ ССЫЛКА === */
@@ -689,16 +713,14 @@ body {
 .logo-camo {
   font-size: 24px;
   font-weight: 700;
-  font-family: 'OpenSans';
-  src: url('fonts/OpenSans-Regular.woff2') format('woff2');
   color: white;
-  font-style: italic;
   text-decoration: none;
   letter-spacing: -0.5px;
 }
 
 /* ВКЛАДКИ ПО ЦЕНТРУ */
 .nav-tabs-camo {
+    background-color: white;
     display: flex;
     border-radius: 50px;
     padding: 6px;
@@ -710,7 +732,7 @@ body {
   padding: 6px 5px;
   font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
+  color: #422711;
   text-decoration: none;
   border-radius: 50px;
   transition: all 0.3s ease;
@@ -719,7 +741,12 @@ body {
 }
 
 .nav-tab-item:hover {
-  background: rgba(10, 61, 58, 0.05);
+  background: rgba(185, 118, 55, 0.1);
+}
+
+.nav-tab-item.active {
+  background: #b97637;
+  color: #ffffff;
 }
 
 
@@ -754,25 +781,11 @@ body {
 
 .btn-login {
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
 }
 
-.btn-login:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
-}
 
 .btn-register {
-  color: #082826;
-  background: #b97637;
-  border: 2px solid #b97637;
-}
-
-.btn-register:hover {
-  background: #a0662f;
-  border-color: #a0662f;
-  transform: translateY(-1px);
+  color: #ffffff;
 }
 
 .auth-user-menu {
@@ -785,6 +798,17 @@ body {
   color: white;
   font-size: 14px;
   font-weight: 500;
+}
+
+.btn-profile {
+  color: white;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-profile:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-logout {
@@ -838,6 +862,22 @@ body {
   display: flex;
   align-items: center;
   margin-right: 12px;
+  transition: opacity 0.2s;
+}
+
+.cart-icon-btn.cart-active {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.cart-icon-btn.cart-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cart-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cart-icon-btn img {
@@ -869,6 +909,136 @@ body {
 
 .user-name-link:hover {
   opacity: 0.8;
+}
+
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-name-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.user-name-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-menu-arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  color: #b97637;
+}
+
+.user-menu-wrapper.open .user-menu-arrow {
+  transform: rotate(180deg);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  min-width: 240px;
+  z-index: 1000;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.dropdown-user-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dropdown-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b97637 0%, #a0662f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(185, 118, 55, 0.3);
+  border: 2px solid white;
+}
+
+.dropdown-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdown-username {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-email {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-item.logout-item {
+  color: #d32f2f;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dropdown-item.logout-item:hover {
+  background: #ffebee;
+  color: #c62828;
 }
 
 
@@ -1189,12 +1359,27 @@ body {
   padding: 14px 32px;
   background: #b97637;
   color: white;
+  border: none;
   border-radius: 50px;
   font-weight: 700;
   font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
   margin-top: 8px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-add-to-cart:hover:not(:disabled) {
+  background: #a0662f;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(185, 118, 55, 0.4);
+}
+
+.btn-add-to-cart:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* === АДАПТИВНОСТЬ === */
@@ -1329,7 +1514,7 @@ body {
 
 .mobile-menu-item.active {
   background: #b97637;
-  color: #082826;
+  color: white;
   font-weight: 600;
 }
 
@@ -1669,7 +1854,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
   padding: 40px 20px;
   text-align: center;
   color: #666;
@@ -1678,7 +1862,9 @@ body {
 .loading-spinner {
   transform: translateX(-15px);
   width: 120px;
-  height: 120px;
+  height: 61px;
+  max-height: 61px;
+  object-fit: contain;
   margin-bottom: 16px;
   opacity: 1; 
 }

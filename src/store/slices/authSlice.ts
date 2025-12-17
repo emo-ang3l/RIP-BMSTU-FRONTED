@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { apiClient } from '../../api/axios';
+import { api, updateApiTokens } from '../../api';
 
 interface User {
-  id: number;
+  id?: number; // Опциональный, так как в API тип опциональный
   username: string;
   email?: string;
   first_name?: string;
@@ -19,11 +19,12 @@ interface AuthState {
   error: string | null;
 }
 
+// НЕ загружаем токены из localStorage - сессия сбрасывается при F5
 const initialState: AuthState = {
   user: null,
-  accessToken: localStorage.getItem('accessToken'),
-  refreshToken: localStorage.getItem('refreshToken'),
-  isAuthenticated: !!localStorage.getItem('accessToken'),
+  accessToken: null,
+  refreshToken: null,
+  isAuthenticated: false,
   isLoading: false,
   error: null,
 };
@@ -33,22 +34,40 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials: { username: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post('/auth/token/', credentials);
-      const { access, refresh } = response.data;
+      // Используем кастомный эндпоинт /auth/login/ который возвращает токены и sessionid
+      const response = await api.auth.authLoginCreate({
+        username: credentials.username,
+        password: credentials.password,
+      });
+      // Бэкенд возвращает { access, refresh, sessionid }
+      const { access, refresh } = response.data as any;
       
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', access);
-      localStorage.setItem('refreshToken', refresh);
+      // Обновляем токены в API клиенте
+      if (access) {
+        updateApiTokens(access);
+      }
       
-      // Fetch user info
-      const userResponse = await apiClient.get('/users/me/');
+      // НЕ сохраняем токены в localStorage - сессия сбрасывается при F5
+      // Токены хранятся только в Redux state
+      
+      // Fetch user info используя сгенерированный API
+      const userResponse = await api.users.usersMeRead();
       const user = Array.isArray(userResponse.data) ? userResponse.data[0] : userResponse.data;
       
       return { access, refresh, user };
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.detail || error.message || 'Login failed'
-      );
+      // Логируем ошибку для отладки
+      console.error('Login error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+      
+      // Возвращаем понятное сообщение об ошибке
+      const errorMessage = error.response?.data?.detail || 
+                          error.response?.data?.message || 
+                          error.message || 
+                          'Ошибка входа. Проверьте правильность логина и пароля.';
+      
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -58,7 +77,15 @@ export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData: { username: string; email?: string; password?: string; first_name?: string; last_name?: string }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post('/users/register/', userData);
+      // Используем сгенерированный API для регистрации
+      // Примечание: тип User не содержит password (write_only), но бэкенд требует его
+      const response = await api.users.usersRegister({
+        username: userData.username,
+        email: userData.email,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        password: userData.password, // Пароль обязателен для регистрации
+      } as any); // Приведение типа, так как password не входит в тип User
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -71,16 +98,19 @@ export const registerUser = createAsyncThunk(
 // Async thunk for logout
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async (_, { rejectWithValue }) => {
+  async () => {
     try {
-      await apiClient.post('/auth/logout/');
+      // Используем сгенерированный API для выхода
+      await api.auth.authLogoutCreate();
     } catch (error: any) {
       // Even if logout fails on server, clear local storage
       console.error('Logout error:', error);
     } finally {
-      // Clear tokens from localStorage
+      // Очищаем токены из localStorage на всякий случай
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      // Очищаем токены в API клиенте
+      updateApiTokens('');
     }
   }
 );
@@ -90,7 +120,8 @@ export const fetchCurrentUser = createAsyncThunk(
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get('/users/me/');
+      // Используем сгенерированный API для получения информации о пользователе
+      const response = await api.users.usersMeRead();
       return Array.isArray(response.data) ? response.data[0] : response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -111,8 +142,9 @@ const authSlice = createSlice({
       state.accessToken = action.payload.access;
       state.refreshToken = action.payload.refresh;
       state.isAuthenticated = true;
-      localStorage.setItem('accessToken', action.payload.access);
-      localStorage.setItem('refreshToken', action.payload.refresh);
+      // Обновляем токены в API клиенте
+      updateApiTokens(action.payload.access);
+      // НЕ сохраняем в localStorage - сессия сбрасывается при F5
     },
   },
   extraReducers: (builder) => {
@@ -129,6 +161,11 @@ const authSlice = createSlice({
         state.refreshToken = action.payload.refresh;
         state.user = action.payload.user;
         state.error = null;
+        // Обновляем токены в API клиенте
+        if (action.payload.access) {
+          updateApiTokens(action.payload.access);
+        }
+        // Токены хранятся только в Redux state - сессия сбрасывается при F5
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -159,16 +196,23 @@ const authSlice = createSlice({
         state.refreshToken = null;
         state.isAuthenticated = false;
         state.error = null;
+        // localStorage уже очищен в logoutUser thunk
       });
 
     // Fetch current user
     builder
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = true;
       })
       .addCase(fetchCurrentUser.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        state.accessToken = null;
+        state.refreshToken = null;
+        // Очищаем токены из localStorage на всякий случай
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       });
   },
 });
